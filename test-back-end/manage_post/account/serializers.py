@@ -1,15 +1,8 @@
 from rest_framework import serializers
-from .models import UserModels
-from .models import UserModels
-# from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-
+from .models import AccountModels
 
 class AccountSerializer(serializers.ModelSerializer):
     class Meta:
-        model = UserModels
+        model = AccountModels
         fields = '__all__'
-
-# class TokenSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = UserModels
-#         fields = ('phone_number')
+        extra_kwargs = {'password': {'write_only': True}}
