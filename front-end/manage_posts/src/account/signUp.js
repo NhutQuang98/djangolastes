@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
-import { METHOD_POST } from '../utils/api/methodAxios';
+import { METHOD_POST_NOT_HEADER } from '../utils/api/methodAxios';
 import { notify_success, notify_fail } from "../utils/common/Notification";
+import Cookies from 'js-cookie';
+import styles from './account.module.css';
+import { useNavigate } from 'react-router-dom';
 
 const SignUp = () => {
+    const navigate = useNavigate();
     const [input, setInput] = useState({
-        userName: '',
-        password: '',
-        verifyPassword: '',
-        name: '',
-        dateOfBirth: '',
-        numberPhone: '',
-        email: '',
+        username: 'username1',
+        password: '123456',
+        verifyPassword: '123456',
+        name: 'member 1',
+        email: 'member1@gmail.com',
+        phone_number: '0927266219',
     })
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -19,20 +22,21 @@ const SignUp = () => {
         } else {
             try {
                 async function fetchData() {
-                    const data = await METHOD_POST({
-                        url: 'account/',
+                    const data = await METHOD_POST_NOT_HEADER({
+                        url: 'sign-up/',
                         param: {
-                            user_name: input.userName,
+                            username: input.username,
                             password: input.password,
                             name: input.name,
-                            birth_date: input.dateOfBirth,
-                            phone_number: input.numberPhone,
-                            email: input.email
+                            email: input.email,
+                            phone_number: input.phone_number,
                         }
                     })
-                    console.log(!data === null)
                     if (data && data.res.status === 201) {
+                        Cookies.set('access_token', data.res.data.access_token);
+                        Cookies.set('refresh_token', data.res.data.refresh_token);
                         notify_success('Sign-up success!')
+                        navigate('/list-category');
                     } else {
                         notify_fail('Sign-up fail!')
                     }
@@ -45,79 +49,42 @@ const SignUp = () => {
     }
 
     return (
-        <div>
-            <form onSubmit={handleSubmit} method='post'>
-                <table>
-                    <thead>
-                        <tr>
-                            <th><h2>Sign-up</h2></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><input
-                                type="text"
-                                value={input.userName}
-                                onChange={(e) => setInput({ ...input, userName: e.target.value })}
-                                placeholder='username enter'
-                            /></td>
-                        </tr>
-                        <tr>
-                            <td><input
-                                type="password"
-                                value={input.password}
-                                onChange={(e) => setInput({ ...input, password: e.target.value })}
-                                placeholder='password enter'
-                            /></td>
-                        </tr>
-                        <tr>
-                            <td><input
-                                type="password"
-                                value={input.verifyPassword}
-                                onChange={(e) => setInput({ ...input, verifyPassword: e.target.value })}
-                                placeholder='Verify password enter'
-                            /></td>
-                        </tr>
-                        <tr>
-                            <td><input
-                                type="text"
-                                value={input.name}
-                                onChange={(e) => setInput({ ...input, name: e.target.value })}
-                                placeholder='Name enter'
-                            /></td>
-                        </tr>
-                        <tr>
-                            <td><input
-                                style={{ width: '95%' }}
-                                type="date"
-                                value={input.dateOfBirth}
-                                onChange={(e) => setInput({ ...input, dateOfBirth: e.target.value })}
-                                placeholder='Date of birth enter'
-                            /></td>
-                        </tr>
-                        <tr>
-                            <td><input
-                                type="text"
-                                value={input.numberPhone}
-                                onChange={(e) => setInput({ ...input, numberPhone: e.target.value })}
-                                placeholder='Number phone enter'
-                            /> </td>
-                        </tr>
-                        <tr>
-                            <td><input
-                                type="email"
-                                value={input.email}
-                                onChange={(e) => setInput({ ...input, email: e.target.value })}
-                                placeholder='Email enter'
-                            /></td>
-                        </tr>
-                        <tr style={{ textAlign: 'right' }}>
-                            <td><button type="submit">Sign-up</button></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </form>
-        </div>
+        <form onSubmit={handleSubmit} method='post'>
+            <div className={styles.container}>
+                <h2>Sign-Up</h2><br />
+                <label htmlFor="username">UserName</label>
+                <input type="text" id="username" name="username" placeholder="Username Enter" value={input.username}
+                    onChange={(e) => setInput({ ...input, username: e.target.value })}
+                />
+
+                <label htmlFor="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Password Enter" value={input.password}
+                    onChange={(e) => setInput({ ...input, password: e.target.value })}
+                />
+
+                <label htmlFor="verifypassword">Verify Password</label>
+                <input type="password" id="verifypassword" name="verifypassword" placeholder="Verify Password Enter" value={input.verifyPassword}
+                    onChange={(e) => setInput({ ...input, verifyPassword: e.target.value })}
+                />
+
+                <label htmlFor="name">Name</label>
+                <input type="text" id="name" name="name" placeholder="Name Enter" value={input.name}
+                    onChange={(e) => setInput({ ...input, name: e.target.value })}
+                />
+
+                <label htmlFor="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Email Enter" value={input.email}
+                    onChange={(e) => setInput({ ...input, email: e.target.value })}
+                />
+
+                <label htmlFor="numberphone">Number Phone</label>
+                <input type="text" id="numberphone" name="numberphone" placeholder="Number Phone Enter" value={input.phone_number}
+                    onChange={(e) => setInput({ ...input, phone_number: e.target.value })}
+                />
+
+                <button type="submit">Sign-up</button>
+            </div>
+        </form>
     );
 };
 

@@ -8,6 +8,8 @@ import UpdateUser from './admin/users/UpdateUser';
 import ListPosts from './admin/posts/ListPosts';
 import UpdatePost from './admin/posts/UpdatePost';
 import AddPost from './admin/posts/AddPost';
+import ListCategory from './admin/category/ListCategory';
+import AddCategory from './admin/category/AddCategory';
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/list-user' element={<ListUser />} />
           <Route path='/update-user' element={<UpdateUser />} />
+          <Route path='/list-category' element={<ListCategory />} />
+          <Route path='/add-category' element={<AddCategory />} />
           <Route path='/list-post' element={<ListPosts />} />
           <Route path='/update-post' element={<UpdatePost />} />
           <Route path='/add-post' element={<AddPost />} />
