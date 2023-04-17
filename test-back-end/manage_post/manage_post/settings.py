@@ -83,7 +83,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'test',
         'USER': 'postgres',
-        'PASSWORD': '200422',
+        'PASSWORD': '20042022',
         'HOST': 'localhost',
         'PORT': '5432'
     }
@@ -203,3 +203,16 @@ SIMPLE_JWT = {
     "ALGORITHM": "HS256",
     "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
 }
+
+
+# setting session
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+# SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+# SESSION_ENGINE = 'django.contrib.sessions.backends.file'
+# SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
+
+# cho phép truy cập từ các trang web khác
+SESSION_COOKIE_SAMESITE = 'None'
+# yêu cầu truy cập an toàn qua HTTPS
+SESSION_COOKIE_SECURE = True

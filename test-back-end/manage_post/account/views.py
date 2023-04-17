@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.forms.models import model_to_dict
 
 # @permission_classes([AllowAny])
 class AccountAll(APIView):
@@ -17,6 +18,12 @@ class AccountAll(APIView):
         except:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+class TestSession(APIView):
+    def get(self, request):
+        username = request.session['username']
+        email = request.session['email']
+        return Response({"username: ": username, "email": email}, status=status.HTTP_200_OK)
 
 # @permission_classes([AllowAny])
 class SignIn(APIView):
@@ -34,8 +41,21 @@ class SignIn(APIView):
                     refresh = RefreshToken.for_user(data)
                     # tạo access token
                     access_token = str(refresh.access_token)
-                    print("success")
-                    return Response({"Message": "OK", "refresh_token": str(refresh), "access_token": access_token}, status=status.HTTP_200_OK)
+                    # lưu session
+                    request.session['username'] = data.username
+                    # request.session['password'] = data.password
+                    request.session['name'] = data.name
+                    request.session['email'] = data.email
+                    request.session['phone_number'] = data.phone_number
+                    request.session['is_superuser'] = data.is_superuser
+                    request.session['is_staff'] = data.is_staff
+                    request.session['is_active'] = data.is_active
+                    request.session['date_joined'] = data.date_joined
+                    request.session['date_updated'] = data.date_updated
+                    request.session.save()
+                    sessionid = request.session.session_key
+                    print("sign-in success")
+                    return Response({"Message": "OK", "refresh_token": str(refresh), "access_token": access_token, "sessionid": sessionid}, status=status.HTTP_200_OK)
                 else:
                     return Response({"Not OK"}, status=status.HTTP_404_NOT_FOUND)
             else:
@@ -45,7 +65,7 @@ class SignIn(APIView):
             print("except")
             return Response({"except"}, status=status.HTTP_400_BAD_REQUEST)
         
-
+import pdb
 # @permission_classes([AllowAny])
 class SignUp(APIView):
     def post(self, request):
@@ -63,7 +83,20 @@ class SignUp(APIView):
             refresh = RefreshToken.for_user(data)
             # tạo access token
             access_token = str(refresh.access_token)
-            print("success")
+             # lưu session
+            request.session['username'] = data.username
+            # request.session['password'] = data.password
+            request.session['name'] = data.name
+            request.session['email'] = data.email
+            request.session['phone_number'] = data.phone_number
+            request.session['is_superuser'] = data.is_superuser
+            request.session['is_staff'] = data.is_staff
+            request.session['is_active'] = data.is_active
+            request.session['date_joined'] = data.date_joined
+            request.session['date_updated'] = data.date_updated
+            request.session.save()
+            sessionid = request.session.session_key
+            print("sign-up success")
             return Response({"Message": "OK", "refresh_token": str(refresh), "access_token": access_token}, status=status.HTTP_201_CREATED)
         else:
             print(serializer.errors)
