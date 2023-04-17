@@ -26,6 +26,7 @@ const SignIn = () => {
         if (data && data.res.status === 200) {
           Cookies.set('access_token', data.res.data.access_token);
           Cookies.set('refresh_token', data.res.data.refresh_token);
+          Cookies.set('sessionid', data.res.data.sessionid);
           notify_success('Sign-up success!');
           navigate('/list-category');
         } else {
